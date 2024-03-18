@@ -2,7 +2,6 @@
 Описание таблиц базы данных
 """
 from __future__ import annotations
-from typing import List
 
 from sqlalchemy import (Integer,
                         String,
@@ -17,6 +16,7 @@ from sqlalchemy.orm import (DeclarativeBase,
 
 
 class Base(DeclarativeBase):
+    """Базовый класс для таблиц БД"""
     pass
 
 
@@ -30,23 +30,25 @@ UsersAchievements = Table(
 
 
 class Users(Base):
+    """Таблица 'users'"""
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     user_name: Mapped[str] = mapped_column(String(30), nullable=False)
     language: Mapped[str] = mapped_column(nullable=False)
-    achievements: Mapped[List[Achievements]] = relationship(
+    achievements: Mapped[list[Achievements]] = relationship(
         secondary=UsersAchievements, back_populates="users"
     )
 
 
 class Achievements(Base):
+    """Таблица 'achievements'"""
     __tablename__ = "achievements"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     achievement_name: Mapped[str] = mapped_column(String(50), nullable=False)
     achievement_value: Mapped[int] = mapped_column(Integer, nullable=False)
     achievement_desc: Mapped[str] = mapped_column(String(150), nullable=False)
-    users: Mapped[List[Users]] = relationship(
+    users: Mapped[list[Users]] = relationship(
         secondary=UsersAchievements, back_populates="achievements"
     )

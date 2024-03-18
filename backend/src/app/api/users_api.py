@@ -2,11 +2,10 @@
 Описание API для работы с пользователями
 """
 from datetime import date
-from typing import List, Tuple
 
 from fastapi import APIRouter, Depends
 
-import app.api.stats_api as stats_api
+from app.api import stats_api
 from app.services.user_services import UserService
 from app.models.user_models import UserModel
 from app.models.achievement_models import AchievementModel
@@ -30,7 +29,9 @@ def get_user(
     user_id: int,
     service: UserService = Depends()
 ) -> Users:
-    
+    """
+    Метод API  для получения пользователя по id
+    """
     return service.get_user(
         user_id=user_id
     )
@@ -42,26 +43,41 @@ def get_user(
 def reward_user_with_achievement(
     achievement_id: int,
     user_id: int,
-    date: date = date.today(),
+    reward_date: date = date.today(),
     service: UserService = Depends()
 ) -> dict:
-    
+    """
+    Метод API для присвоению пользователю достижения
+    Args:
+        achievement_id: int - id достижения
+        user_id: int - id пользователя
+        reward_date: date - дата достижения
+    Returns:
+        dict со статусом добавления
+    """
     return service.reward_user_with_achievement(
         achievement_id=achievement_id,
         user_id=user_id,
-        date=date
+        reward_date=reward_date
     )
 
 
 @router.get(
     '/{user_id}/ahievements/',
-    response_model=List[Tuple[AchievementModel, date]]
+    response_model=list[tuple[AchievementModel, date]]
 )
 def get_user_achievements(
     user_id: int,
     service: UserService = Depends()
-) -> List[Tuple[Achievements, date]]:
-
+) -> list[tuple[Achievements, date]]:
+    """
+    Метод API для получения всех достижения пользователя
+    Args:
+        user_id: int - id пользователя
+    Returns:
+        ist[tuple[Achievements, date]] - список достижений
+        с датами их получения
+    """
     return service.get_user_achievements(
         user_id=user_id
     )

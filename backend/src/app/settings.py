@@ -28,12 +28,13 @@ class Settings(BaseSettings):
     def get_database_url(
         self
     ) -> str:
-        return f'postgresql+psycopg2://{self.database_user}:' + \
-                                       f'{self.database_password}@' + \
-                                       f'{self.database_host}:' + \
-                                       f'{self.database_port}/' + \
-                                       f'{self.database_name}'
+        """Метод возвращает строку подключения к базе данных"""
 
+        return f'postgresql+psycopg2://{self.database_user}:' + \
+            f'{self.database_password}@' + \
+            f'{self.database_host}:' + \
+            f'{self.database_port}/' + \
+            f'{self.database_name}'
 
     class Config:
         """Настройки окружения программы."""
